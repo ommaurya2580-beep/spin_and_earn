@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1091700744691",
+    "project_id": "spin-and-earn-money-24634",
+    "storage_bucket": "spin-and-earn-money-24634.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091700744691:android:959bd6a71235f7719c3286",
+        "android_client_info": {
+          "package_name": "com.example.spin_and_earn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091700744691-c2ia3kbgpcjmcsbuqvmv9i2ipqlltl4c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.spin_and_earn",
+            "certificate_hash": "e4965c3de595942d8bdd2bdaaad322d01ba0ca59"
+          }
+        },
+        {
+          "client_id": "1091700744691-kog5cb6glblt0l5ideae3t5qfr85164s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSC4WIIsbultS4NmnKYgJ5fa_16cLt-5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091700744691-kog5cb6glblt0l5ideae3t5qfr85164s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
