@@ -1,44 +1,53 @@
-class WithdrawalRequestModel {
-  final String id;
-  final String uid;
-  final String upiId;
-  final int amount;
-  final int pointsUsed;
-  final String status; // pending | approved | rejected | paid
-  final DateTime requestedAt;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  WithdrawalRequestModel({
+class WithdrawalRequest {
+  final String id;
+  final String userId;
+  final String userName;
+  final int coins;
+  final double amountInRupees;
+  final String? mobileNumber;
+  final String? upiId;
+  final String status; // pending, approved, rejected
+  final DateTime createdAt;
+
+  WithdrawalRequest({
     required this.id,
-    required this.uid,
-    required this.upiId,
-    required this.amount,
-    required this.pointsUsed,
-    this.status = 'pending',
-    required this.requestedAt,
+    required this.userId,
+    required this.userName,
+    required this.coins,
+    required this.amountInRupees,
+    this.mobileNumber,
+    this.upiId,
+    required this.status,
+    required this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'id': id,
+      'userId': userId,
+      'userName': userName,
+      'coins': coins,
+      'amountInRupees': amountInRupees,
+      'mobileNumber': mobileNumber,
       'upiId': upiId,
-      'amount': amount,
-      'pointsUsed': pointsUsed,
       'status': status,
-      'requestedAt': requestedAt.toIso8601String(),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 
-  factory WithdrawalRequestModel.fromMap(String id, Map<String, dynamic> map) {
-    return WithdrawalRequestModel(
-      id: id,
-      uid: map['uid'] ?? '',
-      upiId: map['upiId'] ?? '',
-      amount: map['amount'] ?? 0,
-      pointsUsed: map['pointsUsed'] ?? 0,
+  factory WithdrawalRequest.fromMap(Map<String, dynamic> map, String docId) {
+    return WithdrawalRequest(
+      id: docId,
+      userId: map['userId'] ?? '',
+      userName: map['userName'] ?? 'User',
+      coins: map['coins']?.toInt() ?? 0,
+      amountInRupees: map['amountInRupees']?.toDouble() ?? 0.0,
+      mobileNumber: map['mobileNumber'],
+      upiId: map['upiId'],
       status: map['status'] ?? 'pending',
-      requestedAt: map['requestedAt'] != null
-          ? DateTime.parse(map['requestedAt'])
-          : DateTime.now(),
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
     );
   }
 }

@@ -1,73 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'providers/auth_provider.dart';
+
+import 'firebase_options.dart';
 import 'providers/user_provider.dart';
-import 'services/ad_service.dart';
+import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-
-  // Initialize ads after the first frame to avoid blocking startup.
-  Future.microtask(AdService.initialize);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await MobileAds.instance.initialize();
+  runApp(const SpinAndEarnApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SpinAndEarnApp extends StatelessWidget {
+  const SpinAndEarnApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-        ChangeNotifierProxyProvider<AuthProvider, UserProvider>(
-          create: (_) => UserProvider(),
-          update: (_, auth, userProvider) {
-            final instance = userProvider ?? UserProvider();
-            instance.bindAuthUser(auth.user?.uid);
-            return instance;
-          },
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => UserProvider(),
       child: MaterialApp(
-        title: 'Spin and Earn',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const AuthWrapper(),
+        title: 'Spin & Earn',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: const SplashScreen(),
       ),
     );
   }
 }
 
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
+class Root extends StatelessWidget {
+  const Root({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (context, authProvider, child) {
-        if (authProvider.isLoading) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-
-        if (authProvider.user == null) {
-          return const LoginScreen();
-        }
-
-        return const HomeScreen();
-      },
-    );
+    final user = context.watch<UserProvider>().user;
+    return user == null ? const LoginScreen() : const HomeScreen();
   }
 }
